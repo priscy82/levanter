@@ -9,8 +9,12 @@ const start = async () => {
   } catch (error) {
     const databaseUrl = process.env.DATABASE_URL
     logger.error({ msg: 'Unable to connect to the database', error: error.message, databaseUrl })
-    return stopInstance()
-  }
+    if (process.env.HOSTED !== 'true') {
+    stopInstance()
+    return
+  } else {
+    console.log('[INFO] stopInstance skipped: running in hosted mode.')
+    }
   try {
     const bot = new Client()
     await bot.connect()
